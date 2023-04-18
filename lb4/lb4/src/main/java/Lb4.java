@@ -5,7 +5,7 @@ import java.util.List;
 public class Lb4 {
     private static final int RAND_NUMBERS_COUNT = 100;
     //TODO - set proper values here
-    private static final int N = 28;//номер у журналі
+    private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи
     private static final int N_CH = 4;//кількість каналів
     private static final int H = 80;//середній час обслуговування
