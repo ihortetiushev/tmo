@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Lb4 {
     private static final int RAND_NUMBERS_COUNT = 100;
-    //TODO - set proper values here
+
     private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи
-    private static final int N_CH = 4;//кількість каналів
-    private static final int H = 80;//середній час обслуговування
+    private static final int N_CH = 6;//кількість каналів
+    private static final int H = 75;//середній час обслуговування
     private static final int T1 = N + 1;
     private static final int T2 = N + 200;
     private static final String COL_FORMAT = "%-10s";
@@ -34,9 +34,9 @@ public class Lb4 {
     }
 
     private static Double calculateP(double lambda) {
-        Double ro = lambda * H;
-        Double numerator = Math.pow(ro, N_CH) / factorial(N_CH);
-        Double denominator = 0.0;
+        double ro = lambda * H;
+        double numerator = Math.pow(ro, N_CH) / factorial(N_CH);
+        double denominator = 0.0;
         for (int k = 0; k <= N_CH; k++) {
             denominator = denominator + Math.pow(ro, k) / factorial(k);
         }
@@ -64,8 +64,8 @@ public class Lb4 {
         int rejectNumber = 0;
         printHeader();
         for (int i = 0; i < tk.size(); i++) {
-            Double nextTk = tk.get(i);
-            Double tkEndProcessingTime = nextTk + ksiList.get(i);
+            double nextTk = tk.get(i);
+            double tkEndProcessingTime = nextTk + ksiList.get(i);
             Integer processorChannelNum = null;
             for (int k = 0; k < channels.size(); k++) {
                 Channel candidate = channels.get(k);
