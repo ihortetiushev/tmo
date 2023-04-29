@@ -28,29 +28,18 @@ public class Main {
         }
         System.out.println("Сума знаменника P0 = " + sum_p0);
         P0 = 1 / (sum_p0 + (Math.pow(p,(N + 1) / (getF(N) * (N -p) ))));
-
         System.out.println("P0 = " + P0);
         System.out.println();
+
         System.out.println("P(k):");
         for(int k = 0; k <= N; k++) {
             double P = (Math.pow(p, k) / getF(k)) * P0;
             System.out.println(P);
         }
 
-
-
-       /* for(int k = 0; k <= N; k++) {
-            double sum_p = 0 ;
-            for (int i =0; i <= N; i++) {
-                double x = Math.pow(p,i)/getF(i);
-                sum_p += x;
-            }
-            Pk = (Math.pow(p,k)/getF(k))/(sum_p);
-            System.out.println("P"+ k +" "+ Pk);
-        }
-
-        System.out.println();*/
-
+        System.out.println();
+        double P_bz = (Math.pow(p,N) / (getF(N - 1) * (N - p))) * P0;
+        System.out.println("Р(зайн.) = " + P_bz);
 
     }
 }
