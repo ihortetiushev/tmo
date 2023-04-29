@@ -21,13 +21,21 @@ public class Main {
         System.out.println("V = " + V);
         System.out.println("p = " + p);
 
-        System.out.println("P0 = ");
-      //  P0 = 1 /
+        double sum_p0 = 0;
+        for (int k =0; k <= N; k++) {
+            double x = Math.pow(p,k)/getF(k);
+            sum_p0 += x;
+        }
+        System.out.println("Сума знаменника P0 = " + sum_p0);
+        P0 = 1 / (sum_p0 + (Math.pow(p,(N + 1) / (getF(N) * (N -p) ))));
 
-        /*System.out.println("P(k)");
-        for(int k = 0; k < ; k++){
-            Pk = ();
-        }*/
+        System.out.println("P0 = " + P0);
+        System.out.println();
+        System.out.println("P(k):");
+        for(int k = 0; k <= N; k++) {
+            double P = (Math.pow(p, k) / getF(k)) * P0;
+            System.out.println(P);
+        }
 
 
 
