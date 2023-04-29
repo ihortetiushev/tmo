@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lb4 {
-    private static final int RAND_NUMBERS_COUNT = 100;
+    private static final int RAND_NUMBERS_COUNT = 200;
 
     private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи

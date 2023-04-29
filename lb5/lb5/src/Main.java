@@ -15,15 +15,23 @@ public class Main {
         double V = 3.0 * ((m + 2.0 + (Nn / 5.0)) / (Nn * N));
         double p = lambda / V;
         double Pk;
+        double P0;
         System.out.println("Task1");
         System.out.println("lambda = " + lambda);
         System.out.println("V = " + V);
         System.out.println("p = " + p);
 
+        System.out.println("P0 = ");
+      //  P0 = 1 /
 
-        System.out.println("P(k)");
+        /*System.out.println("P(k)");
+        for(int k = 0; k < ; k++){
+            Pk = ();
+        }*/
 
-        for(int k = 0; k <= N; k++) {
+
+
+       /* for(int k = 0; k <= N; k++) {
             double sum_p = 0 ;
             for (int i =0; i <= N; i++) {
                 double x = Math.pow(p,i)/getF(i);
@@ -33,7 +41,7 @@ public class Main {
             System.out.println("P"+ k +" "+ Pk);
         }
 
-        System.out.println();
+        System.out.println();*/
 
 
     }
