@@ -33,7 +33,7 @@ public class Main {
         System.out.println("а) P(k):");
         for(int k = 0; k <= N; k++) {
             double P = (Math.pow(p, k) / getF(k)) * P0;
-            System.out.println(P);
+            System.out.println("P"+ k +" "+ P);
         }
 
         System.out.println();
