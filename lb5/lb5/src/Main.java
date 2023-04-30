@@ -74,7 +74,6 @@ public class Main {
         System.out.println();
         System.out.println("є) T(з.оч) = " + T_gen_exp);
 
-
         double T_req = T_exp + (1 / V);
         System.out.println();
         System.out.println("ж) T(вим.) = " + T_req);
