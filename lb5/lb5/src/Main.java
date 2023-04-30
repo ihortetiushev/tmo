@@ -47,18 +47,32 @@ public class Main {
             sum_M_req += x;
         }
         System.out.println();
-        System.out.println("в) Сума знаменника M(вимог) = " + sum_M_req);
+        System.out.println("в) Сума знаменника M(вимог.) = " + sum_M_req);
         M_req = P0 * ( (p * sum_M_req) + ( Math.pow(p,N+1) * (N + 1 - p) ) / ( getF(N-1)) * Math.pow((N-p), 2) );
-        System.out.println("M(вимог) = " + M_req);
+        System.out.println("M(вимог.) = " + M_req);
 
         double M_queue;
         M_queue = (Math.pow(p,N+1) * P0) / (getF(N -1) * Math.pow((N -p),2));
         System.out.println();
         System.out.println("г) M(черги) = " + M_queue);
 
+        double M_free;
+        double M_busy = p;
+        M_free = N - M_busy;
+        System.out.println();
+        System.out.println("ґ) М(вільн.) = " + M_free);
 
+        System.out.println();
+        System.out.println("д) M(зайн.) = " + M_busy);
 
+        double T_exp = ( ( Math.pow(p,N) ) / ( V * getF(N - 1) * Math.pow((N - p),2) ) ) * P0;
+        System.out.println();
+        System.out.println("е) Т(оч.) = " + T_exp);
 
+       // double
+
+        System.out.println();
+       // System.out.println("є) T(з.оч = )" + );
 
     }
 }
