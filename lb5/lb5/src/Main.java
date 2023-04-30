@@ -25,8 +25,8 @@ public class Main {
             double x = Math.pow(p,k)/getF(k);
             sum_p0 += x;
         }
-        System.out.println("Сума знаменника P0 = " + sum_p0);
-        P0 = 1 / (sum_p0 + (Math.pow(p,(N + 1) / (getF(N) * (N -p) ))));
+
+        P0 = 1 / (sum_p0 + (Math.pow(p, (N + 1)) / getF(N) * (N - p) ) );
         System.out.println("P0 = " + P0);
         System.out.println();
 
@@ -47,9 +47,8 @@ public class Main {
             sum_M_req += x;
         }
         System.out.println();
-        System.out.println("в) Сума знаменника M(вимог.) = " + sum_M_req);
-        M_req = P0 * ( (p * sum_M_req) + ( Math.pow(p,N+1) * (N + 1 - p) ) / ( getF(N-1)) * Math.pow((N-p), 2) );
-        System.out.println("M(вимог.) = " + M_req);
+        M_req = P0 * ( (p * sum_M_req) + (( Math.pow(p,(N+1)) * (N + 1 - p) ) / ( getF(N-1) * Math.pow((N-p), 2)) ));
+        System.out.println("в) M(вимог.) = " + M_req);
 
         double M_queue;
         M_queue = (Math.pow(p,N+1) * P0) / (getF(N -1) * Math.pow((N -p),2));
