@@ -33,7 +33,7 @@ public class Main {
         System.out.println("а) P(k):");
         for(int k = 0; k <= N; k++) {
             double P = (Math.pow(p, k) / getF(k)) * P0;
-            System.out.println("P"+ k +" "+ P);
+            System.out.println("P"+ k +" = "+ P);
         }
 
         System.out.println();
@@ -72,15 +72,15 @@ public class Main {
         double T_gen_exp = ( ( Math.pow(p,N + 1) ) / ( getF(N - 1) * Math.pow((N - p),2) ) ) * P0;
 
         System.out.println();
-        System.out.println("є) T(з.оч = )" + T_gen_exp);
+        System.out.println("є) T(з.оч) = " + T_gen_exp);
 
 
         double T_req = T_exp + (1 / V);
         System.out.println();
-        System.out.println("ж) T(вим.)" + T_req);
+        System.out.println("ж) T(вим.) = " + T_req);
 
         double T_sum_req = T_gen_exp + p;
         System.out.println();
-        System.out.println("з) T(с.вим.)" + T_sum_req);
+        System.out.println("з) T(с.вим.) = " + T_sum_req);
     }
 }
