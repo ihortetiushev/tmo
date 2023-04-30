@@ -14,7 +14,6 @@ public class Main {
         double lambda = 15.0 * ((double) m / (Nn * N));
         double V = 3.0 * ((m + 2.0 + (Nn / 5.0)) / (Nn * N));
         double p = lambda / V;
-        double Pk;
         double P0;
         System.out.println("Task1");
         System.out.println("lambda = " + lambda);
@@ -31,7 +30,7 @@ public class Main {
         System.out.println("P0 = " + P0);
         System.out.println();
 
-        System.out.println("P(k):");
+        System.out.println("а) P(k):");
         for(int k = 0; k <= N; k++) {
             double P = (Math.pow(p, k) / getF(k)) * P0;
             System.out.println(P);
@@ -39,7 +38,27 @@ public class Main {
 
         System.out.println();
         double P_bz = (Math.pow(p,N) / (getF(N - 1) * (N - p))) * P0;
-        System.out.println("Р(зайн.) = " + P_bz);
+        System.out.println("б) Р(зайн.) = " + P_bz);
+
+        double M_req;
+        double sum_M_req = 0;
+        for (int k =0; k <= N - 1; k++) {
+            double x = Math.pow(p,k)/getF(k);
+            sum_M_req += x;
+        }
+        System.out.println();
+        System.out.println("в) Сума знаменника M(вимог) = " + sum_M_req);
+        M_req = P0 * ( (p * sum_M_req) + ( Math.pow(p,N+1) * (N + 1 - p) ) / ( getF(N-1)) * Math.pow((N-p), 2) );
+        System.out.println("M(вимог) = " + M_req);
+
+        double M_queue;
+        M_queue = (Math.pow(p,N+1) * P0) / (getF(N -1) * Math.pow((N -p),2));
+        System.out.println();
+        System.out.println("г) M(черги) = " + M_queue);
+
+
+
+
 
     }
 }
