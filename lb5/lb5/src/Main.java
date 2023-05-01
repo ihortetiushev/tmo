@@ -15,7 +15,7 @@ public class Main {
         double V = 3.0 * ((m + 2.0 + (Nn / 5.0)) / (Nn * N));
         double p = lambda / V;
         double P0;
-        System.out.println("Task1");
+        System.out.println("Task 1:");
         System.out.println("lambda = " + lambda);
         System.out.println("V = " + V);
         System.out.println("p = " + p);
@@ -30,11 +30,16 @@ public class Main {
         System.out.println("P0 = " + P0);
         System.out.println();
 
-        System.out.println("а) P(k):");
+        System.out.println("P(k):");
         for(int k = 0; k <= N; k++) {
             double P = (Math.pow(p, k) / getF(k)) * P0;
             System.out.println("P"+ k +" = "+ P);
         }
+
+        double P_queue = ( (Math.pow(p,N + 1) ) / ( getF(N) * (N - p)) ) * P0;
+        System.out.println();
+        System.out.println("Task 2:");
+        System.out.println("а) Р(черг.) = " + P_queue);
 
         System.out.println();
         double P_bz = (Math.pow(p,N) / (getF(N - 1) * (N - p))) * P0;
