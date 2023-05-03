@@ -35,6 +35,10 @@ public class Main {
             double P = (Math.pow(p, k) / getF(k)) * P0;
             System.out.println("P"+ k +" = "+ P);
         }
+        for (int k = N + 1; k <= 10; k++ ){
+            double P = ( (Math.pow(p, k) ) / ( Math.pow(N,(k - N)) * getF(N) ) ) * P0;
+            System.out.println("P"+ k +" = "+ P);
+        }
 
         double P_queue = ( (Math.pow(p,N + 1) ) / ( getF(N) * (N - p)) ) * P0;
         System.out.println();
