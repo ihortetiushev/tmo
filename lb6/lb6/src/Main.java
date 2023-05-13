@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         NUM_FORMAT.setMinimumFractionDigits(3);
         NUM_FORMAT.setMaximumFractionDigits(3);
-        int K_lost;
+        int K_lost = 0;
 
         List<Channel> channels = initializeChannels();
         List<Double> ri = generateRandNumbers();
@@ -31,7 +31,7 @@ public class Main {
         Double pReject = (double) rejectNumber / tk.size();
         System.out.println("Модельна ймовірність відмови: " + NUM_FORMAT.format(pReject));
         System.out.println("Ймовірність відмови (Ерланг): " + NUM_FORMAT.format(calculateP(lambda)));
-
+        System.out.println("K(вим.): " + rejectNumber);
     }
 
     private static Double calculateP(double lambda) {
@@ -134,10 +134,10 @@ public class Main {
         return listTk;
     }
 
-    private static List<Double> calculateZi(List<Double> lst, Double lamdba) {
+    private static List<Double> calculateZi(List<Double> lst, Double lambda) {
         List<Double> listZi = new ArrayList<>();
         for (Double num : lst) {
-            listZi.add(-(1.0 / lamdba) * Math.log(num));
+            listZi.add(-(1.0 / lambda) * Math.log(num));
         }
         return listZi;
     }
@@ -154,9 +154,4 @@ public class Main {
         return randNumbers;
     }
 
-    /*private static int calcKlost(int K_lost){
-        if(){
-            K_lost++;
-        }
-    }*/
 }
