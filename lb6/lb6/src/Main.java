@@ -7,8 +7,8 @@ public class Main {
 
     private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи
-    private static final int N_CH = 6;//кількість каналів
-    private static final int H = 75;//середній час обслуговування
+    private static final int N_CH = 5;//кількість каналів
+    private static final int H = 90;//середній час обслуговування
     private static final int T1 = N + 1;
     private static final int T2 = N + 200;
     private static final String COL_FORMAT = "%-10s";
@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
         NUM_FORMAT.setMinimumFractionDigits(3);
         NUM_FORMAT.setMaximumFractionDigits(3);
+        int K_lost;
 
         List<Channel> channels = initializeChannels();
         List<Double> ri = generateRandNumbers();
@@ -87,9 +88,9 @@ public class Main {
         StringBuilder header = new StringBuilder();
         header.append(String.format(COL_FORMAT, "r"));
         header.append(String.format(COL_FORMAT, "z"));
-        header.append(String.format(COL_FORMAT, "Ksi"));
-        header.append(String.format(COL_FORMAT, "tk"));
-        header.append(String.format(COL_FORMAT, "T звіл"));
+        header.append(String.format(COL_FORMAT, "E(ksi)"));
+        header.append(String.format(COL_FORMAT, "t(пост)"));
+        header.append(String.format(COL_FORMAT, "T(звіл)"));
         header.append(String.format(COL_FORMAT, "N каналу"));
         System.out.println(header);
     }
@@ -142,7 +143,7 @@ public class Main {
     }
 
     private static Double calculateLambda() {
-        return 10 * (double) M / (N * N_CH);
+        return 12 * (double) M / (N * N_CH);
     }
 
     private static List<Double> generateRandNumbers() {
@@ -152,4 +153,10 @@ public class Main {
         }
         return randNumbers;
     }
+
+    /*private static int calcKlost(int K_lost){
+        if(){
+            K_lost++;
+        }
+    }*/
 }
