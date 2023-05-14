@@ -19,29 +19,28 @@ public class Main {
         NUM_FORMAT.setMinimumFractionDigits(3);
         NUM_FORMAT.setMaximumFractionDigits(3);
         int K_lost = 0;
-
         List<Channel> channels = initializeChannels();
         List<Double> ri = generateRandNumbers();
         Double lambda = calculateLambda();
+        double ro = lambda * H;
         System.out.println("lambda: " + NUM_FORMAT.format(lambda));
         List<Double> zi = calculateZi(ri, lambda);
         List<Double> ksiList = calculateKsi(ri);
         List<Double> tk = calculateTk(zi);
-        int rejectNumber = simulateProcessing(ri, zi, ksiList, tk, channels);
-        Double pReject = (double) rejectNumber / tk.size();
-        System.out.println("Модельна ймовірність відмови: " + NUM_FORMAT.format(pReject));
-        System.out.println("Ймовірність відмови (Ерланг): " + NUM_FORMAT.format(calculateP(lambda)));
-        System.out.println("K(вим.): " + rejectNumber);
-    }
+        int accumulate = simulateProcessing(ri, zi, ksiList, tk, channels);
 
-    private static Double calculateP(double lambda) {
-        double ro = lambda * H;
-        double numerator = Math.pow(ro, N_CH) / factorial(N_CH);
-        double denominator = 0.0;
-        for (int k = 0; k <= N_CH; k++) {
-            denominator = denominator + Math.pow(ro, k) / factorial(k);
-        }
-        return numerator / denominator;
+        Double pReject = (double) accumulate / tk.size();
+        System.out.println("K(н.) = " + accumulate);
+        System.out.println("К(вим.) = " + tk.size());
+        System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
+        /*System.out.println("ro = " + ro);
+        System.out.println("lambda = " + lambda);
+        System.out.println("H = " + H);*/
+        System.out.println("P0 = " + calcP0(ro));
+        System.out.println("Р(чер.) = " + calculatePQueue(ro));
+        //System.out.println("Ймовірність відмови (Ерланг): " + NUM_FORMAT.format(calculateP(lambda)));
+        System.out.println();
+
     }
 
     private static int factorial(int n) {
@@ -154,4 +153,20 @@ public class Main {
         return randNumbers;
     }
 
+    private static Double calculatePQueue(double ro) {
+        double numerator = Math.pow(ro, N + 1);
+        double denominator = factorial(N) * (N - ro);
+
+        return (numerator / denominator) * calcP0(ro);
+    }
+    private static Double calcP0(double ro){
+        double numerator = 1;
+        double denominator = 0;
+        for (int k = 0; k <= N; k++) {
+
+            denominator = denominator + Math.pow(ro, k) / factorial(k);
+        }
+        denominator += ( Math.pow(ro, N + 1)/ ( factorial(N) * (N - ro) ) );
+        return numerator / denominator;
+    }
 }
