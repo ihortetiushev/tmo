@@ -23,7 +23,7 @@ public class Main {
         List<Double> ri = generateRandNumbers();
         Double lambda = calculateLambda();
         double ro = lambda * H;
-        System.out.println("lambda: " + NUM_FORMAT.format(lambda));
+        System.out.println("lambda: " + NUM_FORMAT.format(lambda) + " (викл/хв)");
         List<Double> zi = calculateZi(ri, lambda);
         List<Double> ksiList = calculateKsi(ri);
         List<Double> tk = calculateTk(zi);
@@ -34,7 +34,7 @@ public class Main {
         System.out.println("К(вим.) = " + tk.size());
         System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
         System.out.println("p = " + ro);
-        System.out.println("h = " + H);
+        System.out.println("h = " + H + " хв.");
         System.out.println("P0 = " + calcP0(ro));
         System.out.println("Р(чер.) = " + calculatePQueue(ro));
         //System.out.println("Ймовірність відмови (Ерланг): " + NUM_FORMAT.format(calculateP(lambda)));
