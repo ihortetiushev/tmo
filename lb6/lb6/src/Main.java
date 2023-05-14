@@ -8,7 +8,7 @@ public class Main {
     private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи
     private static final int N_CH = 5;//кількість каналів
-    private static final int H = 90;//середній час обслуговування
+    private static final double H = 1.5;//середній час обслуговування
     private static final int T1 = N + 1;
     private static final int T2 = N + 200;
     private static final String COL_FORMAT = "%-10s";
@@ -33,13 +33,11 @@ public class Main {
         System.out.println("K(н.) = " + accumulate);
         System.out.println("К(вим.) = " + tk.size());
         System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
-        /*System.out.println("ro = " + ro);
-        System.out.println("lambda = " + lambda);
-        System.out.println("H = " + H);*/
+        System.out.println("p = " + ro);
+        System.out.println("h = " + H);
         System.out.println("P0 = " + calcP0(ro));
         System.out.println("Р(чер.) = " + calculatePQueue(ro));
         //System.out.println("Ймовірність відмови (Ерланг): " + NUM_FORMAT.format(calculateP(lambda)));
-        System.out.println();
 
     }
 
@@ -101,7 +99,7 @@ public class Main {
         line.append(String.format(COL_FORMAT, NUM_FORMAT.format(ksi)));
         line.append(String.format(COL_FORMAT, NUM_FORMAT.format(tk)));
         line.append(String.format(COL_FORMAT, NUM_FORMAT.format(tFree)));
-        String chNo = assignedChannel != null ? assignedChannel.toString() : "Втрата";
+        String chNo = assignedChannel != null ? assignedChannel.toString() : "В чергу";
         line.append(String.format(COL_FORMAT, chNo));
         System.out.println(line);
     }
@@ -154,19 +152,19 @@ public class Main {
     }
 
     private static Double calculatePQueue(double ro) {
-        double numerator = Math.pow(ro, N + 1);
-        double denominator = factorial(N) * (N - ro);
+        double numerator = Math.pow(ro, N_CH + 1);
+        double denominator = factorial(N_CH) * (N_CH - ro);
 
         return (numerator / denominator) * calcP0(ro);
     }
     private static Double calcP0(double ro){
         double numerator = 1;
         double denominator = 0;
-        for (int k = 0; k <= N; k++) {
+        for (int k = 0; k <= N_CH; k++) {
 
             denominator = denominator + Math.pow(ro, k) / factorial(k);
         }
-        denominator += ( Math.pow(ro, N + 1)/ ( factorial(N) * (N - ro) ) );
+        denominator += ( Math.pow(ro, N_CH + 1)/ ( factorial(N_CH) * (N_CH - ro) ) );
         return numerator / denominator;
     }
 }
