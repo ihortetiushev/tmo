@@ -37,8 +37,6 @@ public class Main {
         System.out.println("h = " + H + " хв.");
         System.out.println("P0 = " + calcP0(ro));
         System.out.println("Р(чер.) = " + calculatePQueue(ro));
-        //System.out.println("Ймовірність відмови (Ерланг): " + NUM_FORMAT.format(calculateP(lambda)));
-
     }
 
     private static int factorial(int n) {
