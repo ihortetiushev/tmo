@@ -1,14 +1,12 @@
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
-    private static final int RAND_NUMBERS_COUNT = 200;
 
     private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи
     private static final int N_CH = 5;//кількість каналів
-    private static final double H = 1.5;//середній час обслуговування
+    private static final double H = 90;//середній час обслуговування
     private static final int T1 = N + 1;
     private static final int T2 = N + 200;
     private static final String COL_FORMAT = "%-10s";
@@ -18,21 +16,56 @@ public class Main {
     public static void main(String[] args) {
         NUM_FORMAT.setMinimumFractionDigits(3);
         NUM_FORMAT.setMaximumFractionDigits(3);
-        int K_lost = 0;
         List<Channel> channels = initializeChannels();
-        List<Double> ri = generateRandNumbers();
         Double lambda = calculateLambda();
-        double ro = lambda * H;
         System.out.println("lambda: " + NUM_FORMAT.format(lambda) + " (викл/хв)");
-        List<Double> zi = calculateZi(ri, lambda);
-        List<Double> ksiList = calculateKsi(ri);
-        List<Double> tk = calculateTk(zi);
-        int accumulate = simulateProcessing(ri, zi, ksiList, tk, channels);
+        double ro = lambda * H;
+        double sumZi = 0.0;
+        printHeader();
+        Queue<Candidate> queue = new LinkedList<>();
+        int queuedCount = 0;
+        int totalCount = 0;
+        while (true) {
+            Double ri = getNextRandNumber();
+            Double zi = calculateZi(ri, lambda);
+            sumZi = sumZi + zi;
+            Double ksi = calculateKsi(ri);
+            Double tk = generateTk(sumZi, queue.size());
+            if (tk == null) {
+                //end simulating
+                break;
+            }
+            totalCount ++;
+            if (queue.size() > 0) {
+                if (tk < T2) {
+                    //do not accept requests any more if out of range
+                    printItem(ri, zi, ksi, tk, tk + ksi, null);
+                    queue.offer(new Candidate(ksi));
+                    queuedCount++;
+                }
+                Candidate first = queue.peek();
+                Integer assignedChannel = proposeCandidate(tk, tk + first.processingTime, channels);
+                if (assignedChannel != null) {
+                    //removing from queue - report processing
+                    queue.poll();
+                    printItemFromQueue(first.processingTime, tk, tk + first.processingTime, assignedChannel);
+                }
+            } else {
+                Integer assignedChannel = proposeCandidate(tk, tk + ksi, channels);
+                if (assignedChannel == null) {
+                    queue.offer(new Candidate(ksi));
+                    queuedCount++;
+                }
+                printItem(ri, zi, ksi, tk, tk + ksi, assignedChannel);
+            }
+        }
+        System.out.println("Всьго було в черзі:" + queuedCount);
 
-        Double pReject = (double) accumulate / tk.size();
-        System.out.println("K(н.) = " + accumulate);
-        System.out.println("К(вим.) = " + tk.size());
-        System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
+
+        //Double pReject = (double) accumulate / tk.size();
+        //System.out.println("K(н.) = " + accumulate);
+        System.out.println("К(вим.) = " + totalCount);
+        //System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
         System.out.println("p = " + ro);
         System.out.println("h = " + H + " хв.");
         System.out.println("P0 = " + calcP0(ro));
@@ -55,28 +88,17 @@ public class Main {
         return channels;
     }
 
-    private static int simulateProcessing(List<Double> ri, List<Double> zi, List<Double> ksiList,
-                                          List<Double> tk, List<Channel> channels) {
-        int rejectNumber = 0;
-        printHeader();
-        for (int i = 0; i < tk.size(); i++) {
-            double nextTk = tk.get(i);
-            double tkEndProcessingTime = nextTk + ksiList.get(i);
-            Integer processorChannelNum = null;
-            for (int k = 0; k < channels.size(); k++) {
-                Channel candidate = channels.get(k);
-                boolean isAccepted = candidate.takeIntoProcessing(nextTk, tkEndProcessingTime);
-                if (isAccepted) {
-                    processorChannelNum = candidate.getNumber();
-                    break;
-                }
+    private static Integer proposeCandidate(double nextTk, double tkEndProcessingTime, List<Channel> channels) {
+        Integer processorChannelNum = null;
+        for (int k = 0; k < channels.size(); k++) {
+            Channel candidate = channels.get(k);
+            boolean isAccepted = candidate.takeIntoProcessing(nextTk, tkEndProcessingTime);
+            if (isAccepted) {
+                processorChannelNum = candidate.getNumber();
+                break;
             }
-            if (processorChannelNum == null) {
-                rejectNumber++;
-            }
-            printItem(ri.get(i), zi.get(i), ksiList.get(i), tk.get(i), tkEndProcessingTime, processorChannelNum);
         }
-        return rejectNumber;
+        return processorChannelNum;
     }
 
     private static void printHeader() {
@@ -102,51 +124,39 @@ public class Main {
         System.out.println(line);
     }
 
-    private static List<Double> calculateKsi(List<Double> ri) {
-        List<Double> ksiList = new ArrayList<>();
-        for (Double r : ri) {
-            //1/(1/H)==H
-            ksiList.add(-H * Math.log(r));
-        }
-        return ksiList;
+    private static void printItemFromQueue(Double ksi, Double tk, Double tFree, Integer assignedChannel) {
+        StringBuilder line = new StringBuilder();
+        line.append(String.format(COL_FORMAT, "-"));
+        line.append(String.format(COL_FORMAT, "-"));
+        line.append(String.format(COL_FORMAT, NUM_FORMAT.format(ksi)));
+        line.append(String.format(COL_FORMAT, NUM_FORMAT.format(tk)));
+        line.append(String.format(COL_FORMAT, NUM_FORMAT.format(tFree)));
+        line.append(String.format(COL_FORMAT, "З черги->" + assignedChannel));
+        System.out.println(line);
     }
 
-    private static List<Double> calculateTk(List<Double> zi) {
-        List<Double> listTk = new ArrayList<>();
-        for (int k = 0; k < zi.size(); k++) {
-            Double sumZi = 0.0;
-            for (int i = 0; i <= k; i++) {
-                if (i < zi.size()) {
-                    sumZi = sumZi + zi.get(i);
-                }
-            }
-            Double tk = T1 + sumZi;
-            if (tk > T2) {
-                break;
-            }
-            listTk.add(tk);
-        }
-        return listTk;
+    private static Double calculateKsi(Double ri) {
+        return -H * Math.log(ri);
     }
 
-    private static List<Double> calculateZi(List<Double> lst, Double lambda) {
-        List<Double> listZi = new ArrayList<>();
-        for (Double num : lst) {
-            listZi.add(-(1.0 / lambda) * Math.log(num));
+    private static Double generateTk(Double sumZi, int queueSize) {
+        Double tk = T1 + sumZi;
+        if (tk > T2 && queueSize == 0) {
+            return null;
         }
-        return listZi;
+        return tk;
+    }
+
+    private static Double calculateZi(Double r, Double lambda) {
+        return -(1.0 / lambda) * Math.log(r);
     }
 
     private static Double calculateLambda() {
         return 12 * (double) M / (N * N_CH);
     }
 
-    private static List<Double> generateRandNumbers() {
-        List<Double> randNumbers = new ArrayList<>();
-        for (int i = 0; i < RAND_NUMBERS_COUNT; i++) {
-            randNumbers.add(Math.random());
-        }
-        return randNumbers;
+    private static Double getNextRandNumber() {
+        return Math.random();
     }
 
     private static Double calculatePQueue(double ro) {
@@ -155,14 +165,15 @@ public class Main {
 
         return (numerator / denominator) * calcP0(ro);
     }
-    private static Double calcP0(double ro){
+
+    private static Double calcP0(double ro) {
         double numerator = 1;
         double denominator = 0;
         for (int k = 0; k <= N_CH; k++) {
 
             denominator = denominator + Math.pow(ro, k) / factorial(k);
         }
-        denominator += ( Math.pow(ro, N_CH + 1)/ ( factorial(N_CH) * (N_CH - ro) ) );
+        denominator += (Math.pow(ro, N_CH + 1) / (factorial(N_CH) * (N_CH - ro)));
         return numerator / denominator;
     }
 }
