@@ -8,7 +8,7 @@ public class Main {
     private static final int N = 27;//номер у журналі
     private static final int M = 1;//номер групи
     private static final int N_CH = 5;//кількість каналів
-    private static final double H = 1.5;//середній час обслуговування
+    private static final double H = 1.5;//середній час обслуговування 1,5
     private static final int T1 = N + 1;
     private static final int T2 = N + 200;
     private static final String COL_FORMAT = "%-10s";
@@ -30,9 +30,11 @@ public class Main {
         int accumulate = simulateProcessing(ri, zi, ksiList, tk, channels);
 
         Double pReject = (double) accumulate / tk.size();
+
+
         System.out.println("K(н.) = " + accumulate);
         System.out.println("К(вим.) = " + tk.size());
-        System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
+        System.out.println("Модельна ймовірність потрапляння в чергу = " + NUM_FORMAT.format(pReject));
         System.out.println("p = " + ro);
         System.out.println("h = " + H + " хв.");
         System.out.println("P0 = " + calcP0(ro));
@@ -162,7 +164,7 @@ public class Main {
 
             denominator = denominator + Math.pow(ro, k) / factorial(k);
         }
-        denominator += ( Math.pow(ro, N_CH + 1)/ ( factorial(N_CH) * (N_CH - ro) ) );
+        denominator +=  Math.pow(ro, N_CH + 1)/ ( factorial(N_CH) * (N_CH - ro) );
         return numerator / denominator;
     }
 }
