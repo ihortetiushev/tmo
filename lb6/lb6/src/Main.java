@@ -19,7 +19,7 @@ public class Main {
         List<Channel> channels = initializeChannels();
         Double lambda = calculateLambda();
         System.out.println("lambda: " + NUM_FORMAT.format(lambda) + " (викл/хв)");
-        double ro = lambda * H;
+        double ro = (lambda * H) / 60;
         double sumZi = 0.0;
         printHeader();
         Queue<Candidate> queue = new LinkedList<>();
@@ -35,7 +35,10 @@ public class Main {
                 //end simulating
                 break;
             }
-            totalCount ++;
+            if (tk <= T2 ) {
+                totalCount ++;
+            }
+
             if (queue.size() > 0) {
                 if (tk < T2) {
                     //do not accept requests any more if out of range
@@ -62,10 +65,10 @@ public class Main {
         System.out.println("Всьго було в черзі:" + queuedCount);
 
 
-        //Double pReject = (double) accumulate / tk.size();
-        //System.out.println("K(н.) = " + accumulate);
+        Double pReject = (double) queuedCount / totalCount;
+        System.out.println("K(н.) = " + queuedCount);
         System.out.println("К(вим.) = " + totalCount);
-        //System.out.println("Модельна ймовірність відмови = " + NUM_FORMAT.format(pReject));
+        System.out.println("Модельна ймовірність наявності черги = " + NUM_FORMAT.format(pReject));
         System.out.println("p = " + ro);
         System.out.println("h = " + H + " хв.");
         System.out.println("P0 = " + calcP0(ro));
