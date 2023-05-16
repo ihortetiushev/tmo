@@ -71,8 +71,8 @@ public class Main {
         System.out.println("Модельна ймовірність наявності черги = " + NUM_FORMAT.format(pReject));
         System.out.println("p = " + ro);
         System.out.println("h = " + H + " хв.");
-        System.out.println("P0 = " + calcP0(ro));
-        System.out.println("Р(чер.) = " + calculatePQueue(ro));
+        System.out.println("P(чер.) = " + calcP0(ro));
+        System.out.println("P0 = " + calculatePQueue(ro));
     }
 
     private static int factorial(int n) {
