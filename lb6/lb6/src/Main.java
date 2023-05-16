@@ -19,7 +19,7 @@ public class Main {
         List<Channel> channels = initializeChannels();
         Double lambda = calculateLambda();
         System.out.println("lambda: " + NUM_FORMAT.format(lambda) + " (викл/хв)");
-        double ro = (lambda * H) / 60;
+        double ro = (lambda * H);
         double sumZi = 0.0;
         printHeader();
         Queue<Candidate> queue = new LinkedList<>();
@@ -70,9 +70,9 @@ public class Main {
         System.out.println("К(вим.) = " + totalCount);
         System.out.println("Модельна ймовірність наявності черги = " + NUM_FORMAT.format(pReject));
         System.out.println("p = " + ro);
-        System.out.println("h = " + H + " хв.");
-        System.out.println("P(чер.) = " + calcP0(ro));
-        System.out.println("P0 = " + calculatePQueue(ro));
+        System.out.println("h = " + H + " с.");
+        System.out.println("P0 = " + calcP0(ro));
+        System.out.println("P(чер.) = " + calculatePQueue(ro));
     }
 
     private static int factorial(int n) {
